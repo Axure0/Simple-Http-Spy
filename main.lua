@@ -1,8 +1,35 @@
 if getgenv().HTTPSpy then return getgenv().HTTPSpy end
 
-getgenv().HTTPSpy = {}
-
 assert(request, "Executor does not support request.")
+
+-- // HTTPSpy Metatable (Bindable Events suck so I'll go with this)
+
+local Events = {}
+local OnFiredFunction = nil
+
+local HTTPSpy = setmetatable(Events, {
+    __index = function(t, k)
+        if k:lower() == "onfired" then
+            local Self = {}
+
+            function Self:Connect(func)
+                func()
+            end
+
+            return Self
+        end
+
+        return Events[k]
+    end,
+
+    __newindex = function(t, k, v)
+        Events[k] = v
+
+        if OnFiredFunction then
+            OnFiredFunction(k, v)
+        end
+    end
+})
 
 -- // Settings
 
@@ -18,9 +45,6 @@ end
 
 -- // Clone Functions
 
-local rconsoleprint = clonefunction(rconsoleprint)
-local messagebox = clonefunction(messagebox)
-local NewInstance = clonefunction(Instance.new)
 local tostring = clonefunction(tostring)
 local format = clonefunction(string.format)
 local getnamecallmethod = clonefunction(getnamecallmethod)
@@ -35,8 +59,6 @@ local HttpMethods = {
 }
 
 -- // Utilities
-
-local Event = NewInstance("BindableEvent")
 
 local CustomPrint = function(Contents)
     if Settings.ToConsole then
@@ -54,6 +76,7 @@ local CustomPrint = function(Contents)
     end
 
     print(Contents)
+    return
 end
 
 -- // Hooks
@@ -73,9 +96,7 @@ local RequestHook; RequestHook = hookfunction(request, function(params)
         CustomPrint(PrintContent)
     end
 
-    if Event then
-        Event:Fire(params)
-    end
+    HTTPSpy[#HTTPSpy + 1] = params
 
     return RequestHook(params)
 end)
@@ -93,16 +114,14 @@ local HttpHook; HttpHook = hookmetamethod(game, "__namecall", function(self, ...
 
         CustomPrint(PrintContent)
 
-        if Event then
-            Event:Fire(Args)
-        end
+        HTTPSpy[#HTTPSpy + 1] = Args
     end
 
     return HttpHook(self, ...)
 end)
 
--- // Return our Event
+-- // Return our Metatable
 
-HTTPSpy.OnEvent = Event.Event
+getgenv().HTTPSpy = HTTPSpy
 
-return HTTPSpy
+return getgenv().HTTPSpy
