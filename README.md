@@ -6,7 +6,7 @@ I haven't seen many HTTP-Spy scripts, so I thought I'd make one.
 
 ```lua
   local HTTPSpy = loadstring(game:HttpGet("https://raw.githubusercontent.com/Axure0/Simple-Http-Spy/refs/heads/main/main.lua"))({
-    SaveLogs = false -- // Set this to true if you prefer the requests to save to your workspace folder instead of printing.
+    ToConsole = false -- // Set this to true if you prefer the requests to be added to the executor console.
   })
 
   -- // Quick Example of how to use OnEvent
