@@ -29,7 +29,7 @@ local Event = NewInstance("BindableEvent")
 local FileLogIndex = 0
 
 local CustomPrint = function(Contents)
-    if Settings["SaveLogs"] then
+    if Settings.SaveLogs then
         local FileName = format("HTTP-SPY-Log-(%s)-#%s", tostring(game.PlaceId), tostring(FileLogIndex))
 
         writefile(FileName, Contents)
