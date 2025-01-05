@@ -30,7 +30,7 @@ local FileLogIndex = 0
 
 local CustomPrint = function(Contents)
     if Settings.SaveLogs then
-        local FileName = format("HTTP-SPY-Log-(%s)-#%s", tostring(game.PlaceId), tostring(FileLogIndex))
+        local FileName = format("HTTP-SPY-Log-(%s)-#%s.txt", tostring(game.PlaceId), tostring(FileLogIndex))
 
         writefile(FileName, Contents)
 
@@ -66,29 +66,29 @@ local RequestHook; RequestHook = hookfunction(request, function(params)
     return RequestHook(params)
 end)
 
-    local HttpHook; HttpHook = hookmetamethod(game, "__namecall", function(self, ...)
-        local Args = { ... }
-        local Namecall = getnamecallmethod()
+local HttpHook; HttpHook = hookmetamethod(game, "__namecall", function(self, ...)
+    local Args = { ... }
+    local Namecall = getnamecallmethod()
 
-        if table.find(HttpMethods, Namecall) then
-            local PrintContent = format("New %s Request:\n\n", Namecall)
+    if table.find(HttpMethods, Namecall) then
+        local PrintContent = format("New %s Request:\n\n", Namecall)
 
-            for Index, Value in pairs(Args) do
-                PrintContent = PrintContent .. format("%s = %s\n", tostring(Index), tostring(Value))
-            end
-
-            CustomPrint(PrintContent)
-
-            if Event then
-                Event:Fire(Args)
-            end
+        for Index, Value in pairs(Args) do
+            PrintContent = PrintContent .. format("%s = %s\n", tostring(Index), tostring(Value))
         end
 
-        return HttpHook(self, ...)
-    end)
+        CustomPrint(PrintContent)
 
-    -- // Return our Event
+        if Event then
+            Event:Fire(Args)
+        end
+    end
 
-    HTTPSpy.OnEvent = Event.Event
+    return HttpHook(self, ...)
+end)
 
-    return HTTPSpy
+-- // Return our Event
+
+HTTPSpy.OnEvent = Event.Event
+
+return HTTPSpy
