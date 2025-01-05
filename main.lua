@@ -1,3 +1,5 @@
+if getgenv().HTTPSpy then return getgenv().HTTPSpy end
+
 getgenv().HTTPSpy = {}
 
 assert(request, "Executor does not support request.")
