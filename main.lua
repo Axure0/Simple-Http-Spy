@@ -9,7 +9,7 @@ local OnFiredFunction = nil
 
 local HTTPSpy = setmetatable(Events, {
     __index = function(t, k)
-        if k:lower() == "onfired" then
+        if type(k) == "string" and k:lower() == "onfired" then
             local Self = {}
 
             function Self:Connect(func)
