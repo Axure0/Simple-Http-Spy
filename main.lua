@@ -6,9 +6,15 @@ assert(request, "Executor does not support request.")
 
 -- // Settings
 
-local Settings = { ... } or {
+local BaseSettings = {
     ToConsole = false
 }
+
+local Settings = ... or BaseSettings
+
+if not type(Settings) == "table" then
+    Settings = BaseSettings
+end
 
 -- // Clone Functions
 
