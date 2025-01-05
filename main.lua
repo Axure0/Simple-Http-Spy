@@ -4,10 +4,14 @@ assert(request, "Executor does not support request.")
 
 -- // Settings
 
-local Settings = { ... }
+local Settings = { ... } or {
+    ToConsole = false
+}
 
 -- // Clone Functions
 
+local rconsoleprint = clonefunction(rconsoleprint)
+local messagebox = clonefunction(messagebox)
 local NewInstance = clonefunction(Instance.new)
 local tostring = clonefunction(tostring)
 local format = clonefunction(string.format)
@@ -26,17 +30,19 @@ local HttpMethods = {
 
 local Event = NewInstance("BindableEvent")
 
-local FileLogIndex = 0
-
 local CustomPrint = function(Contents)
-    if Settings.SaveLogs then
-        local FileName = format("HTTP-SPY-Log-(%s)-#%s.txt", tostring(game.PlaceId), tostring(FileLogIndex))
+    if Settings.ToConsole then
+        if rconsoleprint then
+            rconsoleprint(Contents)
 
-        writefile(FileName, Contents)
+            return
+        end
 
-        FileLogIndex += 1
+        if messagebox then
+            messagebox(Contents)
 
-        return
+            return
+        end
     end
 
     print(Contents)
