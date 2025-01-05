@@ -23,6 +23,8 @@ local HTTPSpy = setmetatable(Events, {
     end,
 
     __newindex = function(t, k, v)
+        if Events[k] == v then return end
+
         Events[k] = v
 
         if OnFiredFunction then
