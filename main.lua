@@ -25,7 +25,7 @@ local HTTPSpy = setmetatable(Events, {
     __newindex = function(t, k, v)
         if Events[k] == v then return end
 
-        Events[k] = v
+        rawset(Events, k, v)
 
         if OnFiredFunction then
             OnFiredFunction(k, v)
