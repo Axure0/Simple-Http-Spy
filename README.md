@@ -11,13 +11,9 @@ I haven't seen many HTTP-Spy scripts, so I thought I'd make one.
 
   -- // Quick Example of how to use OnEvent
 
-  HTTPSpy.OnEvent:Connect(function(...)
-    local Args = { ... }
-
+  HTTPSpy.OnFired:Connect(function(k, v)
     print("[HTTP Spy] Event Connected.")
 
-    for Index, Value in pairs(Args) do
-      print(tostring(Index), tostring(Value))
-    end
+    print(k, v)
   end)
 ```
