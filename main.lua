@@ -19,7 +19,7 @@ local HTTPSpy = setmetatable(Events, {
             return Self
         end
 
-        return Events[k]
+        return rawget(Events, k)
     end,
 
     __newindex = function(t, k, v)
