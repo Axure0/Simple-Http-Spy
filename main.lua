@@ -41,7 +41,7 @@ local BaseSettings = {
 
 local Settings = ... or BaseSettings
 
-if not type(Settings) == "table" then
+if not (type(Settings) == "table") then
     Settings = BaseSettings
 end
 
